@@ -57,9 +57,23 @@ namespace warmup
             List<string> ignoredExtensions = GetIgnoredExtensions();
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
-                if (ignoredExtensions.Contains(info.Extension)) continue;
+                if (info.IsReadOnly || (info.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+                {
+                    continue;
+                }
+
+                if ((from ext in ignoredExtensions 
+                        where ext.Equals(info.Extension, StringComparison.InvariantCultureIgnoreCase) 
+                        select ext).FirstOrDefault()!=null)
+                {
+                    continue;
+                }
+
                 //skip the .git directory
-                if (new[] {"\\.git\\"}.Contains(info.FullName)) continue;
+                if (new[] { "\\.git\\" }.Contains(info.FullName))
+                {
+                    continue;
+                }
 
                 //process contents
                 string contents = File.ReadAllText(info.FullName);
