@@ -12,8 +12,17 @@
 // specific language governing permissions and limitations under the License.
 namespace warmup
 {
+    /// <summary>
+    /// Interface for template exporter
+    /// </summary>
     internal interface IExporter
     {
+        /// <summary>
+        /// Exports the template to specified location
+        /// </summary>
+        /// <param name="sourceControlWarmupLocation">The source control warmup location.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="targetDir">The target dir.</param>
         void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir);
     }
 }

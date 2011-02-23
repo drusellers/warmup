@@ -57,6 +57,12 @@ namespace warmup.settings
             get { return (string) this["sourceControlType"]; }
         }
 
+        /// <summary>
+        /// Gets the type of the source control.
+        /// </summary>
+        /// <value>
+        /// The type of the source control.
+        /// </value>
         public SourceControlType SourceControlType
         {
             get
@@ -74,10 +80,22 @@ namespace warmup.settings
             }
         }
 
+        /// <summary>
+        /// Gets the ignored file type collection.
+        /// </summary>
         [ConfigurationProperty("ignoredExtensions", IsDefaultCollection = false)]
         public IgnoredFileTypeCollection IgnoredFileTypeCollection
         {
             get { return (IgnoredFileTypeCollection) base["ignoredExtensions"]; }
+        }
+
+        /// <summary>
+        /// Gets the text replace collection.
+        /// </summary>
+        [ConfigurationProperty("textReplaces", IsDefaultCollection = false)]
+        public TextReplaceCollection TextReplaceCollection
+        {
+            get { return (TextReplaceCollection)base["textReplaces"]; }
         }
     }
 }

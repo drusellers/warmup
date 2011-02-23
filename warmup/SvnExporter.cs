@@ -16,10 +16,30 @@ namespace warmup
     using System.Diagnostics;
     using settings;
 
-    public class Svn :
-        IExporter
-    {
-        public static void SvnExport(Uri sourceLocation, TargetDir target)
+    /// <summary>
+    /// Subversion exporter
+    /// </summary>
+    public class SvnExporter : IExporter
+    { 
+        /// <summary>
+        /// Exports the template to specified location
+        /// </summary>
+        /// <param name="sourceControlWarmupLocation">The source control warmup location.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="targetDir">The target dir.</param>
+        public void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir)
+        {
+            var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
+            Console.WriteLine("svn exporting to: {0}", targetDir.FullPath);
+            SvnExport(baseUri, targetDir);
+        }
+
+        /// <summary>
+        /// SVNs the export.
+        /// </summary>
+        /// <param name="sourceLocation">The source location.</param>
+        /// <param name="target">The target.</param>
+        private void SvnExport(Uri sourceLocation, TargetDir target)
         {
             var psi = new ProcessStartInfo("svn",
                                            string.Format("export {0} {1}", sourceLocation, target.FullPath));
@@ -40,13 +60,6 @@ namespace warmup
 
             Console.WriteLine(output);
             Console.WriteLine(error);
-        }
-
-        public void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir)
-        {
-            var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
-            Console.WriteLine("svn exporting to: {0}", targetDir.FullPath);
-            SvnExport(baseUri, targetDir);
         }
     }
 }

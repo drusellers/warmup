@@ -15,9 +15,17 @@ namespace warmup
     using System;
     using System.IO;
 
-    internal class Folder :
-        IExporter
+    /// <summary>
+    /// Template exporter for local filesystem
+    /// </summary>
+    internal class FolderExporter : IExporter
     {
+        /// <summary>
+        /// Exports the template to specified location
+        /// </summary>
+        /// <param name="sourceControlWarmupLocation">The source control warmup location.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="targetDir">The target dir.</param>
         public void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir)
         {
             string baseDir = Path.Combine(sourceControlWarmupLocation, templateName);
@@ -25,7 +33,12 @@ namespace warmup
             CopyDirectory(baseDir, targetDir.FullPath);
         }
 
-        public static void CopyDirectory(string source, string destination)
+        /// <summary>
+        /// Copies the directory.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        private void CopyDirectory(string source, string destination)
         {
             if (destination[destination.Length - 1] != Path.DirectorySeparatorChar)
                 destination += Path.DirectorySeparatorChar;

@@ -12,10 +12,24 @@
 // specific language governing permissions and limitations under the License.
 namespace warmup
 {
+    /// <summary>
+    /// Source control type
+    /// </summary>
     public enum SourceControlType
     {
+        /// <summary>
+        /// Subversion
+        /// </summary>
         Subversion,
+
+        /// <summary>
+        /// GIT
+        /// </summary>
         Git,
+
+        /// <summary>
+        /// Local filesystem
+        /// </summary>
         FileSystem
     }
 }

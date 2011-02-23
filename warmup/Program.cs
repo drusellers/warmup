@@ -28,8 +28,7 @@ namespace warmup
 
             var td = new TargetDir(name);
             IExporter exporter = GetExporter();
-            exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);
-            Console.WriteLine("replacing tokens");
+            exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);         
             td.ReplaceTokens(name);
             td.MoveToDestination(target);
         }
@@ -39,11 +38,11 @@ namespace warmup
             switch (WarmupConfiguration.settings.SourceControlType)
             {
                 case SourceControlType.Subversion:
-                    return new Svn();
+                    return new SvnExporter();
                 case SourceControlType.Git:
-                    return new Git();
+                    return new GitExporter();
                 case SourceControlType.FileSystem:
-                    return new Folder();
+                    return new FolderExporter();
                 default:
                     throw new ArgumentOutOfRangeException();
             }

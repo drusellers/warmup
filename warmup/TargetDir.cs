@@ -19,25 +19,41 @@ namespace warmup
     using System.Linq;
     using settings;
 
+    /// <summary>
+    /// Template processor
+    /// </summary>
     [DebuggerDisplay("{FullPath}")]
     public class TargetDir
     {
         readonly string _path;
         readonly string _replacementToken;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TargetDir"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
         public TargetDir(string path)
         {
             _path = path;
             _replacementToken = WarmupConfiguration.settings.ReplacementToken;
         }
 
+        /// <summary>
+        /// Gets the full path.
+        /// </summary>
         public string FullPath
         {
             get { return Path.GetFullPath(_path); }
         }
 
+        /// <summary>
+        /// Replaces the tokens.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public void ReplaceTokens(string name)
         {
+            Console.WriteLine("Replacing tokens...");
+
             var startingPoint = new DirectoryInfo(FullPath);
 
             //move all directories
@@ -52,7 +68,28 @@ namespace warmup
             ReplaceTokensInTheFiles(startingPoint, name);
         }
 
-        void ReplaceTokensInTheFiles(DirectoryInfo point, string name)
+        /// <summary>
+        /// Moves the template to destination.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        public void MoveToDestination(string target)
+        {
+            if (string.IsNullOrEmpty(target)) return;
+            if (!Directory.Exists(target)) return;
+            if (target == FullPath) return;
+
+            DirectoryInfo folder = new DirectoryInfo(FullPath);
+            var destination = Path.Combine(target, folder.Name);
+            Console.WriteLine(string.Format("move {0} to {1}", FullPath, destination));
+            folder.MoveTo(destination);
+        }
+
+        /// <summary>
+        /// Replaces the tokens in the files.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="name">The name.</param>
+        private void ReplaceTokensInTheFiles(DirectoryInfo point, string name)
         {
             List<string> ignoredExtensions = GetIgnoredExtensions();
             foreach (var info in point.GetFiles("*.*", SearchOption.AllDirectories))
@@ -82,7 +119,11 @@ namespace warmup
             }
         }
 
-        static List<string> GetIgnoredExtensions()
+        /// <summary>
+        /// Gets the ignored extensions.
+        /// </summary>
+        /// <returns></returns>
+        private List<string> GetIgnoredExtensions()
         {
             var extension = new List<string>();
             foreach (IgnoredFileType ignoredFileType in WarmupConfiguration.settings.IgnoredFileTypeCollection)
@@ -92,7 +133,12 @@ namespace warmup
             return extension;
         }
 
-        void MoveAllFiles(DirectoryInfo point, string name)
+        /// <summary>
+        /// Moves all files.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="name">The name.</param>
+        private void MoveAllFiles(DirectoryInfo point, string name)
         {
             foreach (var file in point.GetFiles("*.*", SearchOption.AllDirectories))
             {
@@ -109,7 +155,12 @@ namespace warmup
             }
         }
 
-        void MoveAllDirectories(DirectoryInfo dir, string name)
+        /// <summary>
+        /// Moves all directories.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="name">The name.</param>
+        private void MoveAllDirectories(DirectoryInfo dir, string name)
         {
             DirectoryInfo workingDirectory = dir;
             if (workingDirectory.Name.Contains(_replacementToken))
@@ -133,18 +184,6 @@ namespace warmup
             {
                 MoveAllDirectories(info, name);
             }
-        }
-
-        public void MoveToDestination(string target)
-        {
-            if (string.IsNullOrEmpty(target)) return;
-            if (!Directory.Exists(target)) return;
-            if (target == FullPath) return;
-
-            DirectoryInfo folder = new DirectoryInfo(FullPath);
-            var destination = Path.Combine(target, folder.Name);
-            Console.WriteLine(string.Format("move {0} to {1}", FullPath, destination));
-            folder.MoveTo(destination);
         }
     }
 }

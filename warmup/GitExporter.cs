@@ -16,12 +16,32 @@ namespace warmup
     using System.Diagnostics;
     using settings;
 
-    public class Git :
-        IExporter
-    {
-        public static void Clone(Uri sourceLocation, TargetDir target)
+    /// <summary>
+    /// GIT exporter
+    /// </summary>
+    public class GitExporter : IExporter
+    {  
+        /// <summary>
+        /// Exports the template to specified location
+        /// </summary>
+        /// <param name="sourceControlWarmupLocation">The source control warmup location.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="targetDir">The target dir.</param>
+        public void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir)
         {
-            var separationCharacters = new[] {".git"};
+            var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
+            Console.WriteLine("git exporting to: {0}", targetDir.FullPath);
+            Clone(baseUri, targetDir);
+        }
+
+        /// <summary>
+        /// Clones the specified source location.
+        /// </summary>
+        /// <param name="sourceLocation">The source location.</param>
+        /// <param name="target">The target.</param>
+        private void Clone(Uri sourceLocation, TargetDir target)
+        {
+            var separationCharacters = new[] { ".git" };
             string[] piecesOfPath = sourceLocation.ToString().Split(separationCharacters, StringSplitOptions.RemoveEmptyEntries);
             if (piecesOfPath != null && piecesOfPath.Length > 0)
             {
@@ -59,11 +79,5 @@ namespace warmup
             }
         }
 
-        public void Export(string sourceControlWarmupLocation, string templateName, TargetDir targetDir)
-        {
-            var baseUri = new Uri(WarmupConfiguration.settings.SourceControlWarmupLocation + templateName);
-            Console.WriteLine("git exporting to: {0}", targetDir.FullPath);
-            Clone(baseUri, targetDir);
-        }
     }
 }

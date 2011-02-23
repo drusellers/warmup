@@ -14,36 +14,73 @@ namespace warmup.settings
 {
     using System.Configuration;
 
+    /// <summary>
+    /// Ignored file config collection
+    /// </summary>
     public class IgnoredFileTypeCollection : ConfigurationElementCollection //, IEnumerable<IgnoredFileType>
     {
+        /// <summary>
+        /// When overridden in a derived class, creates a new <see cref="T:System.Configuration.ConfigurationElement"/>.
+        /// </summary>
+        /// <returns>
+        /// A new <see cref="T:System.Configuration.ConfigurationElement"/>.
+        /// </returns>
         protected override ConfigurationElement CreateNewElement()
         {
             return new IgnoredFileType();
         }
 
+        /// <summary>
+        /// Gets the element key for a specified configuration element when overridden in a derived class.
+        /// </summary>
+        /// <param name="element">The <see cref="T:System.Configuration.ConfigurationElement"/> to return the key for.</param>
+        /// <returns>
+        /// An <see cref="T:System.Object"/> that acts as the key for the specified <see cref="T:System.Configuration.ConfigurationElement"/>.
+        /// </returns>
         protected override object GetElementKey(ConfigurationElement element)
         {
             return ((IgnoredFileType) element).Extension;
         }
 
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         public void Clear()
         {
             BaseClear();
         }
 
+        /// <summary>
+        /// Indexes the of.
+        /// </summary>
+        /// <param name="ignoredFileType">Type of the ignored file.</param>
+        /// <returns></returns>
         public int IndexOf(IgnoredFileType ignoredFileType)
         {
             return BaseIndexOf(ignoredFileType);
         }
 
+        /// <summary>
+        /// Adds the specified ignored file type.
+        /// </summary>
+        /// <param name="ignoredFileType">Type of the ignored file.</param>
         public void Add(IgnoredFileType ignoredFileType)
         {
             BaseAdd(ignoredFileType);
         }
     }
 
+    /// <summary>
+    /// Ignored file extension item
+    /// </summary>
     public class IgnoredFileType : ConfigurationElement
     {
+        /// <summary>
+        /// Gets or sets the extension.
+        /// </summary>
+        /// <value>
+        /// The extension.
+        /// </value>
         [ConfigurationProperty("ext", IsRequired = true, IsKey = true)]
         public string Extension
         {
