@@ -114,7 +114,16 @@ namespace warmup
 
                 //process contents
                 string contents = File.ReadAllText(info.FullName);
+                
+                // replace main token
                 contents = contents.Replace(_replacementToken, name);
+
+                // replace custom tokens
+                foreach (TextReplaceItem replaceItem in GetReplaceTokens())
+                {
+                    contents = contents.Replace(replaceItem.Find, replaceItem.Replace);
+                }
+
                 File.WriteAllText(info.FullName, contents);
             }
         }
@@ -131,6 +140,15 @@ namespace warmup
                 extension.Add(string.Format(".{0}", ignoredFileType.Extension));
             }
             return extension;
+        }
+
+        /// <summary>
+        /// Gets the replace tokens.
+        /// </summary>
+        /// <returns></returns>
+        private List<TextReplaceItem> GetReplaceTokens()
+        {
+            return new List<TextReplaceItem>(WarmupConfiguration.settings.TextReplaceCollection.Cast<TextReplaceItem>());
         }
 
         /// <summary>
