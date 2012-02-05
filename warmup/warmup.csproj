@@ -38,6 +38,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -50,6 +53,7 @@
     </Compile>
     <Compile Include="Folder.cs" />
     <Compile Include="Git.cs" />
+    <Compile Include="GitHub.cs" />
     <Compile Include="GitTemplateExtractor.cs" />
     <Compile Include="IExporter.cs" />
     <Compile Include="Program.cs" />

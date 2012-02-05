@@ -27,15 +27,17 @@ namespace warmup
             if (args.Length > 2) target = args[2];
 
             var td = new TargetDir(name);
-            IExporter exporter = GetExporter();
+            IExporter exporter = GetExporter(templateName);
             exporter.Export(WarmupConfiguration.settings.SourceControlWarmupLocation, templateName, td);
             Console.WriteLine("replacing tokens");
             td.ReplaceTokens(name);
             td.MoveToDestination(target);
         }
 
-        static IExporter GetExporter()
+        static IExporter GetExporter(string templateName)
         {
+            if (templateName.Contains("github.com")) return new GitHub();
+
             switch (WarmupConfiguration.settings.SourceControlType)
             {
                 case SourceControlType.Subversion:
