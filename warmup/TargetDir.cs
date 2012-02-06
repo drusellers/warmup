@@ -62,10 +62,30 @@ namespace warmup
                 if (new[] {"\\.git\\"}.Contains(info.FullName)) continue;
 
                 //process contents
-                string contents = File.ReadAllText(info.FullName);
+                string contents = File.ReadAllText(info.FullName, System.Text.Encoding.UTF8);
+
                 contents = contents.Replace(_replacementToken, name);
-                File.WriteAllText(info.FullName, contents);
+
+                if (IsDotNetSolutionFile(info)) contents = ConvertLineFeedsToCarriageReturnLineFeed(contents);
+
+                File.WriteAllText(info.FullName, contents, System.Text.Encoding.UTF8);
             }
+        }
+
+        bool IsDotNetSolutionFile(FileInfo file)
+        {
+            return file.FullName.EndsWith(".sln");
+        }
+
+        string ConvertLineFeedsToCarriageReturnLineFeed(string s)
+        {
+            string contents = s;
+
+            contents = contents.Replace("\r\n", "\n");
+
+            contents = contents.Replace("\n", "\r\n");
+
+            return contents;
         }
 
         static List<string> GetIgnoredExtensions()
